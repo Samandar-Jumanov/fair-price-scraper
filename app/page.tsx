@@ -2,7 +2,11 @@ import Image from "next/image";
 import { CgArrowRightO } from "react-icons/cg";
 import Searchbar from "@/components/SearchBar";
 import  HeroCarousel from "@/components/Hero";
-export default function Home() {
+import { getAllProducts } from "@/lib/actions"
+import ProductCard from "@/components/ProductCard";
+export default  async  function Home() {
+
+  const allProducts = await getAllProducts();
   return (
      <>
         <section className="px-6 border-2 md:px-20 py-24 border-green-600">
@@ -33,15 +37,17 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="trending-section">
-             <h2 className="section-text">  
-                Trending
-             </h2>
-        
+       
+      <section className="trending-section">
+        <h2 className="section-text">Trending</h2>
 
-           <div className="flex flex-wrap gap-x-8 gap-y-16"></div>
+        <div className="flex flex-wrap gap-x-8 gap-y-16">
+          {allProducts?.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
+      </section>
 
-        </section>
      </>
   );
 }
