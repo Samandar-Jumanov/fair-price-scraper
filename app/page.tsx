@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { CgArrowRightO } from "react-icons/cg";
+import Searchbar from "@/components/SearchBar";
+import  HeroCarousel from "@/components/Hero";
 export default function Home() {
   return (
      <>
@@ -20,14 +22,14 @@ export default function Home() {
                   </h1>
 
                   <p className="mt-6">
-                            Powerfull , simple . easy to find 
+                            Powerfull , simple , easy to find 
                   </p>
                   
 
-                  SearchBar 
+                  < Searchbar/>
             </div>
 
-            Hero Component 
+          < HeroCarousel/>
           </div>
         </section>
 
@@ -35,9 +37,10 @@ export default function Home() {
              <h2 className="section-text">  
                 Trending
              </h2>
+        
 
+           <div className="flex flex-wrap gap-x-8 gap-y-16"></div>
 
-             
         </section>
      </>
   );
