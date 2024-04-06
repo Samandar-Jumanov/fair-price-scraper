@@ -2,17 +2,16 @@
 
 import { FormEvent, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import Image from 'next/image'
+import { FiMail, FiX, FiAlertCircle } from 'react-icons/fi'; // Importing icons from react-icons
 import { addUserEmailToProduct } from '@/lib/actions'
+import { redirect } from "next/navigation";
 
 interface Props {
-    
   productId: string
-
 }
 
 const Modal = ({ productId }: Props) => {
-  let [isOpen, setIsOpen] = useState(true)
+  let [isOpen, setIsOpen] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -22,9 +21,9 @@ const Modal = ({ productId }: Props) => {
 
     await addUserEmailToProduct(productId, email);
     
-    setIsSubmitting(false)
-    setEmail('')
-    closeModal()
+    setIsSubmitting(false);
+    setEmail('');
+    closeModal();
   }
 
   const openModal = () => setIsOpen(true);
@@ -36,6 +35,15 @@ const Modal = ({ productId }: Props) => {
       <button type="button" className="btn" onClick={openModal}>
         Track
       </button>
+      
+      <button 
+  type="button" 
+  className="mt-10 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+  onClick={() => redirect("/")}
+>
+  Go back
+</button>
+
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" onClose={closeModal} className="dialog-container">
@@ -70,22 +78,10 @@ const Modal = ({ productId }: Props) => {
                 <div className="flex flex-col">
                   <div className="flex justify-between">
                     <div className="p-3 border border-gray-200 rounded-10">
-                      <Image 
-                        src="/assets/icons/logo.svg"
-                        alt="logo"
-                        width={28}
-                        height={28}
-                      />
+                      <FiAlertCircle size={28} color="#000" />
                     </div>
 
-                    <Image 
-                      src="/assets/icons/x-close.svg"
-                      alt="close"
-                      width={24}
-                      height={24}
-                      className="cursor-pointer"
-                      onClick={closeModal}
-                    />
+                    <FiX size={24} color="#000" className="cursor-pointer" onClick={closeModal} />
                   </div>
 
                   <h4 className="dialog-head_text">
@@ -102,12 +98,7 @@ const Modal = ({ productId }: Props) => {
                     Email address
                   </label>
                   <div className="dialog-input_container">
-                    <Image 
-                      src="/assets/icons/mail.svg"
-                      alt='mail'
-                      width={18}
-                      height={18}
-                    />
+                    <FiMail size={18} color="#000" />
 
                     <input 
                       required
@@ -120,9 +111,7 @@ const Modal = ({ productId }: Props) => {
                     />
                   </div>
 
-                  <button type="submit"
-                    className="dialog-btn"
-                  >
+                  <button type="submit" className="dialog-btn">
                     {isSubmitting ? 'Submitting...' : 'Track'}
                   </button>
                 </form>
@@ -135,4 +124,4 @@ const Modal = ({ productId }: Props) => {
   )
 }
 
-export default Modal
+export default Modal;

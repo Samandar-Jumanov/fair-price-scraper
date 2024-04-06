@@ -1,12 +1,13 @@
 import Modal from "@/components/Modal";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
-import { getProductById, } from "@/lib/actions"
+import { getProductById , getSimilarProducts } from "@/lib/actions";
 import { formatNumber } from "@/lib/utils";
 import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { FiHeart, FiBookmark, FiShare, FiStar, FiMessageCircle, FiArrowUp, FiArrowDown, FiTag, FiBarChart } from "react-icons/fi"; // Importing icons from react-icons
 
 type Props = {
   params: { id: string }
@@ -14,10 +15,9 @@ type Props = {
 
 const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
-
-  if(!product) redirect('/')
-
-//   const similarProducts = await getSimilarProducts(id);
+  
+  if (!product) redirect('/');
+  const similarProducts = await getSimilarProducts(id);
 
   return (
     <div className="product-container">
@@ -50,34 +50,18 @@ const ProductDetails = async ({ params: { id } }: Props) => {
 
             <div className="flex items-center gap-3">
               <div className="product-hearts">
-                <Image 
-                  src="/assets/icons/red-heart.svg"
-                  alt="heart"
-                  width={20}
-                  height={20}
-                />
-
+                <FiHeart size={20} color="#D46F77" />
                 <p className="text-base font-semibold text-[#D46F77]">
                   {product.reviewsCount}
                 </p>
               </div>
 
               <div className="p-2 bg-white-200 rounded-10">
-                <Image 
-                  src="/assets/icons/bookmark.svg"
-                  alt="bookmark"
-                  width={20}
-                  height={20}
-                />
+                <FiBookmark size={20} color="black" />
               </div>
 
               <div className="p-2 bg-white-200 rounded-10">
-                <Image 
-                  src="/assets/icons/share.svg"
-                  alt="share"
-                  width={20}
-                  height={20}
-                />
+                <FiShare size={20} color="black" />
               </div>
             </div>
           </div>
@@ -95,24 +79,14 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             <div className="flex flex-col gap-4">
               <div className="flex gap-3">
                 <div className="product-stars">
-                  <Image 
-                    src="/assets/icons/star.svg"
-                    alt="star"
-                    width={16}
-                    height={16}
-                  />
+                  <FiStar size={16} color="#F59E0B" />
                   <p className="text-sm text-primary-orange font-semibold">
                     {product.stars || '25'}
                   </p>
                 </div>
 
                 <div className="product-reviews">
-                  <Image 
-                    src="/assets/icons/comment.svg"
-                    alt="comment"
-                    width={16}
-                    height={16}
-                  />
+                  <FiMessageCircle size={16} color="black" />
                   <p className="text-sm text-secondary font-semibold">
                     {product.reviewsCount} Reviews
                   </p>
@@ -121,7 +95,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
 
               <p className="text-sm text-black opacity-50">
                 <span className="text-primary-green font-semibold">93% </span> of
-                buyers have recommeded this.
+                buyers have recommended this.
               </p>
             </div>
           </div>
@@ -130,22 +104,22 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             <div className="flex gap-5 flex-wrap">
               <PriceInfoCard 
                 title="Current Price"
-                iconSrc="/assets/icons/price-tag.svg"
+                icon={<FiTag size={20} />}
                 value={`${product.currency} ${formatNumber(product.currentPrice)}`}
               />
               <PriceInfoCard 
                 title="Average Price"
-                iconSrc="/assets/icons/chart.svg"
+                icon={<FiBarChart size={20} />}
                 value={`${product.currency} ${formatNumber(product.averagePrice)}`}
               />
               <PriceInfoCard 
                 title="Highest Price"
-                iconSrc="/assets/icons/arrow-up.svg"
+                icon={<FiArrowUp size={20} />}
                 value={`${product.currency} ${formatNumber(product.highestPrice)}`}
               />
               <PriceInfoCard 
                 title="Lowest Price"
-                iconSrc="/assets/icons/arrow-down.svg"
+                icon={<FiArrowDown size={20} />}
                 value={`${product.currency} ${formatNumber(product.lowestPrice)}`}
               />
             </div>
@@ -167,13 +141,13 @@ const ProductDetails = async ({ params: { id } }: Props) => {
         </div>
 
         <button className="btn w-fit mx-auto flex items-center justify-center gap-3 min-w-[200px]">
-          <Link href="/" className="text-base text-white ext-center">
+          <Link href="/" className="text-base text-white text-center">
             Buy Now
           </Link>
         </button>
       </div>
 
-      {/* {similarProducts && similarProducts?.length > 0 && (
+      {similarProducts && similarProducts?.length > 0 && (
         <div className="py-14 flex flex-col gap-2 w-full">
           <p className="section-text">Similar Products</p>
 
@@ -183,9 +157,10 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             ))}
           </div>
         </div>
-      )} */}
+      )}
+      
     </div>
   )
 }
 
-export default ProductDetails
+export default ProductDetails;

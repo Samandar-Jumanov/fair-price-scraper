@@ -36,6 +36,8 @@ export async function scrapeAndStoreProduct(productUrl: string) {
         highestPrice: getHighestPrice(updatedPriceHistory),
         averagePrice: getAveragePrice(updatedPriceHistory),
       }
+
+      return 
     }
 
     const newProduct = await Product.findOneAndUpdate(
@@ -43,6 +45,8 @@ export async function scrapeAndStoreProduct(productUrl: string) {
       product,
       { upsert: true, new: true }
     );
+
+
 
     revalidatePath(`/products/${newProduct._id}`);
   } catch (error: any) {
@@ -59,9 +63,7 @@ export const getProductById = async (  productId : string ) =>{
 
       try {
 
-        const product = await Product.findOne({
-             id : productId 
-        })
+        const product = await Product.findById(productId)
 
 
 
@@ -76,6 +78,25 @@ export const getProductById = async (  productId : string ) =>{
              errorGettingSingle : err.message
            })
       }
+}
+
+
+export async function getSimilarProducts(productId: string) {
+  try {
+    connectDb();
+
+    const currentProduct = await Product.findById(productId);
+
+    if(!currentProduct) return null;
+
+    const similarProducts = await Product.find({
+      _id: { $ne: productId },
+    }).limit(3);
+
+    return similarProducts;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 
