@@ -4,7 +4,7 @@ import { FormEvent, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { FiMail, FiX, FiAlertCircle } from 'react-icons/fi'; // Importing icons from react-icons
 import { addUserEmailToProduct } from '@/lib/actions'
-import { redirect } from "next/navigation";
+import { redirect , useRouter  } from "next/navigation";
 
 interface Props {
   productId: string
@@ -14,6 +14,8 @@ const Modal = ({ productId }: Props) => {
   let [isOpen, setIsOpen] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
+
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,12 +39,12 @@ const Modal = ({ productId }: Props) => {
       </button>
       
       <button 
-  type="button" 
-  className="mt-10 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
-  onClick={() => redirect("/")}
->
-  Go back
-</button>
+        type="button" 
+        className="mt-10 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+        onClick={() => router.push("/")}
+        >
+      Go back
+    </button>
 
 
       <Transition appear show={isOpen} as={Fragment}>

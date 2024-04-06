@@ -6,7 +6,7 @@ import { formatNumber } from "@/lib/utils";
 import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect  } from "next/navigation";
 import { FiHeart, FiBookmark, FiShare, FiStar, FiMessageCircle, FiArrowUp, FiArrowDown, FiTag, FiBarChart } from "react-icons/fi"; // Importing icons from react-icons
 
 type Props = {
@@ -15,6 +15,7 @@ type Props = {
 
 const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
+  
   
   if (!product) redirect('/');
   const similarProducts = await getSimilarProducts(id);
