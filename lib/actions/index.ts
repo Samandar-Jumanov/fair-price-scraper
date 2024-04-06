@@ -5,6 +5,10 @@ import { connectDb } from "../mongoose";
 import { scrapeAmazonProduct } from "../scraper/index"
 import { getLowestPrice , getHighestPrice , getAveragePrice } from "../utils";
 import { revalidatePath } from "next/cache";
+import { User } from "@/types/index";
+import { generateEmailBody, sendEmail } from "../nodemailer/nodemailer";
+
+
 export async function scrapeAndStoreProduct(productUrl: string) {
   if(!productUrl) return;
 
@@ -91,4 +95,35 @@ export const getAllProducts = async ( ) =>{
         throw new Error(error.message)
      }
 
+}
+
+
+export const addUserEmailToProduct = async ( productId : string , email : string ) =>{
+
+        try {
+
+          const product = await Product.findById(productId);
+
+          if(!product) return;
+
+
+          const isUserExists = await product.users.find(( user : User ) => user.email === email);
+
+          if(!isUserExists) {
+               await product.users.push({ email : email})
+          };
+
+
+          const emailContent = await generateEmailBody(product , "WELCOME")
+
+          await sendEmail(emailContent , [email])
+
+        }catch(err : any ){
+            console.log({
+              userEmail : err.message
+            })
+
+
+            throw new Error(err.message)
+        }
 }
